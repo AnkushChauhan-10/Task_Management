@@ -17,6 +17,15 @@ class Task extends Equatable {
     required this.isFavourite,
   });
 
+  Task copyWith({String? name, String? details, bool? isFavourite}) => Task(
+    id: id,
+    name: name ?? this.name,
+    createdDate: createdDate,
+    updateDate: updateDate,
+    taskDetails: taskDetails,
+    isFavourite: isFavourite ?? this.isFavourite,
+  );
+
   @override
   List<Object?> get props => [];
 }

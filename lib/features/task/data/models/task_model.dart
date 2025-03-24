@@ -24,16 +24,16 @@ class TaskModel extends Task {
     id: val["task_id"],
     name: val["task_name"],
     createdDate: val["created_date"],
-    updateDate: val["update_date"],
-    taskDetails: val["task_details"],
-    isFavourite: val["is_favourite"],
+    updateDate: val["updated_date"],
+    taskDetails: val["task_details"] ?? "",
+    isFavourite: val["is_favourite"] ?? false,
   );
 
   DataMap get toJson => {
     "task_id": id,
     "task_name": name,
     "created_date": createdDate,
-    "update_date": updateDate,
+    "updated_date": updateDate,
     "task_details": taskDetails,
     "is_favourite": isFavourite,
   };

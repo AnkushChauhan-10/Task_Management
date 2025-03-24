@@ -12,7 +12,7 @@ abstract class TaskRepository {
 
   FutureResult<List<Task>> get fetchTask;
 
-  FutureResult<bool> insert(Task task);
+  Future<bool> insert(Task task);
 
   FutureResult<Task> addTask({
     required String name,

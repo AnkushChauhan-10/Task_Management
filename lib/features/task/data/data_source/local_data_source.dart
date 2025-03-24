@@ -26,14 +26,34 @@ class LocalDatasourceImpl extends LocalDatasource {
   @override
   Future<List<DataMap>> get allTask async {
     var result = await _appDatabase.query(TaskTable.tableName);
-    return result;
+    var list = List.generate(
+      result.length,
+      (i) => {
+        TaskTable.idColumn: result[i][TaskTable.idColumn],
+        TaskTable.nameColumn: result[i][TaskTable.nameColumn],
+        TaskTable.taskDetailsColumn: result[i][TaskTable.taskDetailsColumn],
+        TaskTable.createdDateColumn: result[i][TaskTable.createdDateColumn],
+        TaskTable.updateDateColumn: result[i][TaskTable.updateDateColumn],
+        TaskTable.isFavouriteColumn:
+            result[i][TaskTable.isFavouriteColumn] ? 0 : 1,
+      },
+    );
+    return list;
   }
 
   @override
   Future<bool> insert(DataMap value) async {
+    DataMap val = {
+      TaskTable.idColumn: value[TaskTable.idColumn],
+      TaskTable.nameColumn: value[TaskTable.nameColumn],
+      TaskTable.taskDetailsColumn: value[TaskTable.taskDetailsColumn],
+      TaskTable.createdDateColumn: value[TaskTable.createdDateColumn],
+      TaskTable.updateDateColumn: value[TaskTable.updateDateColumn],
+      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 0 : 1,
+    };
     var result = await _appDatabase.insert(
       TaskTable.tableName,
-      value,
+      val,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return result;
@@ -41,9 +61,17 @@ class LocalDatasourceImpl extends LocalDatasource {
 
   @override
   Future<bool> updateTask(DataMap value) async {
+    DataMap val = {
+      TaskTable.idColumn: value[TaskTable.idColumn],
+      TaskTable.nameColumn: value[TaskTable.nameColumn],
+      TaskTable.taskDetailsColumn: value[TaskTable.taskDetailsColumn],
+      TaskTable.createdDateColumn: value[TaskTable.createdDateColumn],
+      TaskTable.updateDateColumn: value[TaskTable.updateDateColumn],
+      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 0 : 1,
+    };
     var result = await _appDatabase.update(
       TaskTable.tableName,
-      value,
+      val,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return result;

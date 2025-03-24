@@ -22,13 +22,37 @@ class TaskRepositoryImpl extends TaskRepository {
     required String name,
     required String details,
     required bool isFavourite,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    try {
+      var body = {
+        "task_name": name,
+        "task_details": details,
+        "is_favourite": isFavourite,
+      };
+      var addTask = await _remoteDatasource.addOrUpdateTask(body);
+      var task = TaskModel.json(addTask);
+      await _localDatasource.insert(task.toJson);
+      return Success(task);
+    } catch (e) {
+      if (e is CustomError) return Failure(e);
+      return Failure(UnknownError());
+    }
   }
 
   @override
-  FutureResult<Task> updateTask(Task task) {
-    throw UnimplementedError();
+  FutureResult<Task> updateTask(Task task) async {
+    try {
+      var taskModel = TaskModel.entity(task);
+      var updateRemote = await _remoteDatasource.addOrUpdateTask(
+        taskModel.toJson,
+      );
+      var updatedTask = TaskModel.json(updateRemote);
+      await _localDatasource.updateTask(updatedTask.toJson);
+      return Success(updatedTask);
+    } catch (e) {
+      if (e is CustomError) return Failure(e);
+      return Failure(UnknownError());
+    }
   }
 
   @override
@@ -62,14 +86,13 @@ class TaskRepositoryImpl extends TaskRepository {
   }
 
   @override
-  FutureResult<bool> insert(Task task) async {
+  Future<bool> insert(Task task) async {
     try {
       var taskModel = TaskModel.entity(task);
       var result = await _localDatasource.insert(taskModel.toJson);
-      return Success(result);
+      return result;
     } catch (e) {
-      if (e is CustomError) return Failure(e);
-      return Failure(UnknownError());
+      return false;
     }
   }
 }

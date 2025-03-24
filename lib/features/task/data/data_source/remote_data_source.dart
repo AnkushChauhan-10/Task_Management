@@ -26,7 +26,11 @@ class RemoteDatasourceImpl extends RemoteDatasource {
   Future<DataMap> addOrUpdateTask(DataMap value) async {
     var response = await _client.post(
       Uri.parse(TaskApi.addTaskUrl),
-      headers: {"Content-Type": "application/json"},
+      body: json.encode(value),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     );
     if (response.statusCode == 200) {
       DataMap jsonResponse = json.decode(response.body);
