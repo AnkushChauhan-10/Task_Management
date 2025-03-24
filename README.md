@@ -4,13 +4,27 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Project Overview
+This is a Task Management mobile application developed using Flutter and Dart. The application allows users to create, view, and manage tasks with features such as task creation, retrieval, and display. The app follows Clean Architecture principles and uses BLoC for state management.
 
-A few resources to get you started if this is your first Flutter project:
+Tech Stack
+Frontend: Flutter (Dart)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+State Management: BLoC (Flutter BLoC package)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+API Integration: HTTP (API calls to perform CRUD operations on tasks)
+
+Architecture: Clean Architecture
+
+Dependency Injection: GetIt (for managing dependencies)
+
+Explanation of Folder Structure:
+core/: Contains common utilities that can be used across features. This includes error handling and helper classes.
+
+features/task_management/: The core module for managing tasks. This module is further split into data, domain, and presentation layers.
+
+data/: Contains the classes that interact with external resources, such as the API services and repositories.
+
+domain/: This contains the core business logic, such as entities and use cases.
+
+presentation/: Contains the UI components, BLoC files for managing state, and screens.
