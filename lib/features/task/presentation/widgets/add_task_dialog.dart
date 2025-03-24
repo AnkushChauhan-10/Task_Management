@@ -38,6 +38,12 @@ class AddTaskDialogState extends State<AddTaskDialog> {
           ).showSnackBar(SnackBar(content: Text("${state.task.name} added successfully!")));
           Navigator.of(context).pop();
         }
+        if(state is AddOrUpdateTaskError){
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+          Navigator.of(context).pop();
+        }
       },
       builder: (context, state) {
         if (state is AddOrUpdateTaskLoading) {

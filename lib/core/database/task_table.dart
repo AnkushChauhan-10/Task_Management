@@ -5,7 +5,7 @@ abstract class TaskTable {
 
   static Future<void> create(Database db) async => await db.execute(
     ''
-    'CREATE TABLE $tableName($idColumn INTEGER KEY, '
+    'CREATE TABLE $tableName($idColumn INTEGER PRIMARY KEY, '
     '$nameColumn TEXT, $taskDetailsColumn TEXT, '
     '$createdDateColumn TEXT, $updateDateColumn TEXT, '
     '$isFavouriteColumn INTEGER)'

@@ -11,15 +11,20 @@ class FavouriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AddOrUpdateTaskCubit, AddOrUpdateTaskState>(
+    return BlocConsumer<AddOrUpdateTaskCubit, AddOrUpdateTaskState>(
       bloc: cubit,
+      listener: (context, state) {
+        if (state is AddOrUpdateTaskError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
       builder: (context, state) {
         if (state is AddOrUpdateTaskLoading) return CircularProgressIndicator();
         return IconButton(
           onPressed: () => cubit.changeIsFavourite(task),
-          icon: Icon(
-            task.isFavourite ? Icons.favorite : Icons.favorite_border,
-          ),
+          icon: Icon(task.isFavourite ? Icons.favorite : Icons.favorite_border),
         );
       },
     );

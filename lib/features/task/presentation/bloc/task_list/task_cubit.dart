@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:task_management/core/error/custom_error.dart';
 import 'package:task_management/features/task/domain/entities/task.dart';
 import 'package:task_management/features/task/domain/usecase/fetch_tasks.dart';
 
@@ -16,7 +17,11 @@ class TaskCubit extends Cubit<TaskState> {
     var result = await _fetchTaskUseCase();
     var newState = result.fold(
       (s) => TaskSuccess(s),
-      (f) => TaskError(f.toString(), state.tasks),
+      (f) => TaskError(switch (f) {
+        UnknownError() => "Something went wrong",
+        ServerError() => "Server Error",
+        NoInternet() => "No Internet Connection",
+      }, state.tasks),
     );
     emit(newState);
   }
@@ -24,8 +29,12 @@ class TaskCubit extends Cubit<TaskState> {
   Future<void> refresh() async {
     var result = await _fetchTaskUseCase();
     var newState = result.fold(
-          (s) => TaskSuccess(s),
-          (f) => TaskError(f.toString(), state.tasks),
+      (s) => TaskSuccess(s),
+      (f) => TaskError(switch (f) {
+        UnknownError() => "Something went wrong",
+        ServerError() => "Server Error",
+        NoInternet() => "No Internet Connection",
+      }, state.tasks),
     );
     emit(newState);
   }

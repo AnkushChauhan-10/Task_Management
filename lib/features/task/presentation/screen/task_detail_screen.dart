@@ -56,6 +56,11 @@ class TaskDetailsScreenState extends State<TaskDetailsScreen> {
                 SnackBar(content: Text('Task Updated successfully!')),
               );
             }
+            if(state is AddOrUpdateTaskError){
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
+            }
           },
           builder: (context, state) {
             return Stack(

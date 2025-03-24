@@ -90,6 +90,7 @@ class TaskRepositoryImpl extends TaskRepository {
     try {
       var taskModel = TaskModel.entity(task);
       var result = await _localDatasource.insert(taskModel.toJson);
+      if (!result) result = await _localDatasource.updateTask(taskModel.toJson);
       return result;
     } catch (e) {
       return false;

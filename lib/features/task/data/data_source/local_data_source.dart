@@ -35,7 +35,7 @@ class LocalDatasourceImpl extends LocalDatasource {
         TaskTable.createdDateColumn: result[i][TaskTable.createdDateColumn],
         TaskTable.updateDateColumn: result[i][TaskTable.updateDateColumn],
         TaskTable.isFavouriteColumn:
-            result[i][TaskTable.isFavouriteColumn] ? 0 : 1,
+            result[i][TaskTable.isFavouriteColumn] == 0 ? false : true,
       },
     );
     return list;
@@ -49,12 +49,12 @@ class LocalDatasourceImpl extends LocalDatasource {
       TaskTable.taskDetailsColumn: value[TaskTable.taskDetailsColumn],
       TaskTable.createdDateColumn: value[TaskTable.createdDateColumn],
       TaskTable.updateDateColumn: value[TaskTable.updateDateColumn],
-      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 0 : 1,
+      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 1 : 0,
     };
     var result = await _appDatabase.insert(
       TaskTable.tableName,
       val,
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
     return result;
   }
@@ -62,17 +62,17 @@ class LocalDatasourceImpl extends LocalDatasource {
   @override
   Future<bool> updateTask(DataMap value) async {
     DataMap val = {
-      TaskTable.idColumn: value[TaskTable.idColumn],
       TaskTable.nameColumn: value[TaskTable.nameColumn],
       TaskTable.taskDetailsColumn: value[TaskTable.taskDetailsColumn],
       TaskTable.createdDateColumn: value[TaskTable.createdDateColumn],
       TaskTable.updateDateColumn: value[TaskTable.updateDateColumn],
-      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 0 : 1,
+      TaskTable.isFavouriteColumn: value[TaskTable.isFavouriteColumn] ? 1 : 0,
     };
     var result = await _appDatabase.update(
       TaskTable.tableName,
+      where: "${TaskTable.idColumn} =?",
+      whereArgs: [value[TaskTable.idColumn]],
       val,
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return result;
   }

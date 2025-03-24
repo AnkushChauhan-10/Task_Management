@@ -22,23 +22,26 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Task Management")),
-      body: BlocBuilder<TaskCubit, TaskState>(
+      body: BlocConsumer<TaskCubit, TaskState>(
         builder: (context, state) {
           if (state is TaskLoading || state is TaskInitial) {
             return Center(child: CircularProgressIndicator());
           }
-          if (state.tasks.isEmpty) {
-            return Center(child: Text("You Don't have any task"));
-          }
-          return Column(
-            children: [
-              RefreshIndicator(
-                onRefresh:
-                    () async => await context.read<TaskCubit>().refresh(),
-                child: TaskList(state.tasks),
-              ),
-            ],
+
+          return RefreshIndicator(
+            onRefresh: () async => await context.read<TaskCubit>().refresh(),
+            child:
+                state.tasks.isEmpty
+                    ? Center(child: Text("You Don't have any task"))
+                    : TaskList(state.tasks),
           );
+        },
+        listener: (BuildContext context, TaskState state) {
+          if (state is TaskError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(

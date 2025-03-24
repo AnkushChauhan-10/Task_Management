@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:task_management/core/error/custom_error.dart';
 import 'package:task_management/features/task/domain/entities/task.dart';
 import 'package:task_management/features/task/domain/usecase/add_task.dart';
 import 'package:task_management/features/task/domain/usecase/update_task.dart';
@@ -39,7 +40,11 @@ class AddOrUpdateTaskCubit extends Cubit<AddOrUpdateTaskState> {
     );
     var newSate = result.fold(
       (s) => AddOrUpdateTaskSuccess(s),
-      (f) => AddOrUpdateTaskError(""),
+      (f) => AddOrUpdateTaskError(switch (f) {
+        UnknownError() => "Something went wrong",
+        ServerError() => "Server Error",
+        NoInternet() => "No Internet Connection",
+      }),
     );
     emit(newSate);
     if (newSate is AddOrUpdateTaskSuccess) cubit.addTask(newSate.task);
@@ -56,7 +61,11 @@ class AddOrUpdateTaskCubit extends Cubit<AddOrUpdateTaskState> {
     );
     var newSate = result.fold(
       (s) => AddOrUpdateTaskSuccess(s),
-      (f) => AddOrUpdateTaskError(""),
+      (f) => AddOrUpdateTaskError(switch (f) {
+        UnknownError() => "Something went wrong",
+        ServerError() => "Server Error",
+        NoInternet() => "No Internet Connection",
+      }),
     );
     emit(newSate);
     if (newSate is AddOrUpdateTaskSuccess) cubit.replaceTask(newSate.task);
